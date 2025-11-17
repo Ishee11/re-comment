@@ -36,6 +36,10 @@ func Run(cfg *config.Config) {
 		webapi.New(),
 	)
 
+	// Comment Use-Case + InMemory repo
+	//commentRepo := inmemory.NewInMemoryCommentRepo()
+	//commentUseCase := comment.New(commentRepo)
+
 	// RabbitMQ RPC Server
 	rmqRouter := amqprpc.NewRouter(translationUseCase, l)
 
@@ -44,10 +48,10 @@ func Run(cfg *config.Config) {
 		l.Fatal(fmt.Errorf("app - Run - rmqServer - server.New: %w", err))
 	}
 
-
 	// HTTP Server
 	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
 	http.NewRouter(httpServer.App, cfg, translationUseCase, l)
+	//http.NewCommentRoutes(httpServer.App, commentUseCase, l)
 
 	// Start servers
 	rmqServer.Start()
@@ -71,7 +75,6 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
 	}
-
 
 	err = rmqServer.Shutdown()
 	if err != nil {
