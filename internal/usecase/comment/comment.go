@@ -9,7 +9,7 @@ type UseCase struct {
 	repo repo.CommentRepository
 }
 
-func (uc *UseCase) CreateComment(userID int64, entityID int64, text string) (*entity.Comment, error) {
+func (uc *UseCase) CreateComment(userID, entityID int64, text string) (*entity.Comment, error) {
 	c, err := entity.NewComment(entityID, userID, text)
 	if err != nil {
 		return nil, err
@@ -20,7 +20,7 @@ func (uc *UseCase) CreateComment(userID int64, entityID int64, text string) (*en
 	return c, nil
 }
 
-func (uc *UseCase) UpdateComment(id int64, userID int64, text string) error {
+func (uc *UseCase) UpdateComment(id, userID int64, text string) error {
 	c, err := uc.repo.GetCommentByID(id)
 	if err != nil {
 		return err
@@ -31,6 +31,6 @@ func (uc *UseCase) UpdateComment(id int64, userID int64, text string) error {
 	return uc.repo.UpdateComment(c)
 }
 
-func (uc *UseCase) ListComments(entityID int64, sortAsc bool) ([]*entity.Comment, error) {
-	return uc.repo.ListCommentByEntity(entityID, sortAsc)
+func (uc *UseCase) ListComments(entityID, page, limit int64, sortAsc bool) ([]*entity.Comment, error) {
+	return uc.repo.ListCommentByEntity(entityID, page, limit, sortAsc)
 }
