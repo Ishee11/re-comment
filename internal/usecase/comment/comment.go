@@ -13,6 +13,11 @@ type UseCase struct {
 	repo repo.CommentRepository
 }
 
+// New создаёт новый CommentUseCase с переданным репозиторием.
+func New(repo repo.CommentRepository) *UseCase {
+	return &UseCase{repo: repo}
+}
+
 // CreateComment создаёт новый комментарий для указанной сущности.
 // Проверяет текст комментария через сущность Comment.
 // Сохраняет комментарий через репозиторий.
